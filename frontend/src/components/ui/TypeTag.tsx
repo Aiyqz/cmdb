@@ -1,14 +1,15 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import type { ServiceType } from '../../lib/types'
 
-const typeConfig: Record<ServiceType, { label: string; icon: string }> = {
-  web: { label: 'Web', icon: '🌐' },
-  database: { label: 'DB', icon: '🗄' },
-  docker: { label: 'Docker', icon: '🐳' },
-  proxy: { label: 'Proxy', icon: '🔀' },
-  tunnel: { label: 'Tunnel', icon: '🔗' },
-  network: { label: 'Network', icon: '🌍' },
-  cache: { label: 'Cache', icon: '⚡' },
+const typeConfig: Record<ServiceType, { icon: string }> = {
+  web: { icon: '🌐' },
+  database: { icon: '🗄' },
+  docker: { icon: '🐳' },
+  proxy: { icon: '🔀' },
+  tunnel: { icon: '🔗' },
+  network: { icon: '🌍' },
+  cache: { icon: '⚡' },
 }
 
 interface TypeTagProps {
@@ -17,7 +18,8 @@ interface TypeTagProps {
 }
 
 const TypeTag: React.FC<TypeTagProps> = ({ type, small = false }) => {
-  const config = typeConfig[type] || { label: type, icon: '📦' }
+  const { t } = useTranslation()
+  const config = typeConfig[type] || { icon: '📦' }
   return (
     <span
       className={`inline-flex items-center gap-1 rounded font-mono text-text-tertiary border border-border-subtle ${
@@ -25,7 +27,7 @@ const TypeTag: React.FC<TypeTagProps> = ({ type, small = false }) => {
       }`}
     >
       <span>{config.icon}</span>
-      <span>{config.label}</span>
+      <span>{t(`type.${type}`)}</span>
     </span>
   )
 }

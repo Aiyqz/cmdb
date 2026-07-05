@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import cytoscape from 'cytoscape'
 import dagre from 'cytoscape-dagre'
 import { api } from '../lib/api'
@@ -27,6 +28,7 @@ const STATUS_COLORS: Record<string, string> = {
 const LAYOUTS = ['dagre', 'cose', 'circle'] as const
 
 const Topology: React.FC = () => {
+  const { t } = useTranslation()
   const containerRef = useRef<HTMLDivElement>(null)
   const cyRef = useRef<cytoscape.Core | null>(null)
   const navigate = useNavigate()
@@ -133,13 +135,13 @@ const Topology: React.FC = () => {
 
   return (
     <div className="animate-fade-in">
-      <h1 className="text-[22px] font-semibold text-text-primary mb-1">Service Topology</h1>
-      <p className="text-[13px] text-text-tertiary mb-5">{services.length} services</p>
+      <h1 className="text-[22px] font-semibold text-text-primary mb-1">{t('topology.title')}</h1>
+      <p className="text-[13px] text-text-tertiary mb-5">{t('topology.subtitle', { count: services.length })}</p>
 
       {/* Toolbar */}
       <div className="flex items-center gap-3 mb-4 flex-wrap">
         <div className="flex items-center gap-1.5">
-          <label className="text-[12px] text-text-tertiary">Layout:</label>
+          <label className="text-[12px] text-text-tertiary">{t('topology.layout')}:</label>
           {LAYOUTS.map((l) => (
             <button
               key={l}
@@ -155,15 +157,15 @@ const Topology: React.FC = () => {
           ))}
         </div>
         <div className="flex items-center gap-1.5">
-          <label className="text-[12px] text-text-tertiary">Filter:</label>
+          <label className="text-[12px] text-text-tertiary">{t('topology.filter')}:</label>
           <select
             value={filterType}
             onChange={(e) => setFilterType(e.target.value)}
             className="text-[12px] bg-elevated text-text-secondary border border-border-subtle rounded px-2 py-1"
           >
-            <option value="">All types</option>
+            <option value="">{t('topology.allTypes')}</option>
             {typeOptions.map((t) => (
-              <option key={t} value={t}>{t}</option>
+              <option key={t} value={t}>{t(`type.${t}`)}</option>
             ))}
           </select>
         </div>
@@ -171,7 +173,7 @@ const Topology: React.FC = () => {
           onClick={fitAll}
           className="px-2.5 py-1 rounded text-[11px] text-text-secondary border border-border-subtle hover:border-border-default hover:text-text-primary transition-colors"
         >
-          Fit
+          {t('topology.fit')}
         </button>
       </div>
 
@@ -184,18 +186,18 @@ const Topology: React.FC = () => {
 
       {/* Legend */}
       <div className="flex items-center gap-4 mt-4 text-[11px] text-text-tertiary flex-wrap">
-        <span className="uppercase tracking-wider">Legend:</span>
+        <span className="uppercase tracking-wider">{t('topology.legend')}:</span>
         {Object.entries(STATUS_COLORS).map(([status, color]) => (
           <span key={status} className="flex items-center gap-1">
             <span className="w-2 h-2 rounded-full inline-block" style={{ backgroundColor: color }} />
-            {status}
+            {t(`topology.${status}`)}
           </span>
         ))}
         <span className="text-text-faint ml-2">|</span>
         {Object.entries(TYPE_SHAPES).slice(0, 4).map(([type]) => (
-          <span key={type} className="text-text-faint">{type}</span>
+          <span key={type} className="text-text-faint">{t(`type.${type}`)}</span>
         ))}
-        <span className="text-text-faint">Click node → detail</span>
+        <span className="text-text-faint">{t('topology.clickHint')}</span>
       </div>
     </div>
   )

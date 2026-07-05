@@ -1,0 +1,163 @@
+{
+  "common": {
+    "cancel": "取消",
+    "delete": "删除",
+    "edit": "编辑",
+    "save": "保存",
+    "close": "关闭",
+    "confirm": "确认",
+    "noData": "--",
+    "optional": "可选",
+    "required": "必填",
+    "loading": "加载中...",
+    "error": "错误",
+    "success": "成功",
+    "back": "返回",
+    "search": "搜索",
+    "filter": "筛选",
+    "all": "全部",
+    "add": "添加",
+    "prev": "上一页",
+    "next": "下一页",
+    "auto": "自动"
+  },
+  "nav": {
+    "title": "CMDB",
+    "services": "服务",
+    "topology": "拓扑",
+    "health": "健康"
+  },
+  "status": {
+    "running": "运行中",
+    "error": "异常",
+    "stopped": "已停止",
+    "unknown": "未知"
+  },
+  "type": {
+    "web": "Web",
+    "database": "数据库",
+    "docker": "Docker",
+    "proxy": "代理",
+    "tunnel": "隧道",
+    "network": "网络",
+    "cache": "缓存"
+  },
+  "services": {
+    "title": "服务",
+    "subtitle": "{{count}} 个服务监控中",
+    "search": "搜索服务...",
+    "addService": "添加服务",
+    "addFirst": "添加您的第一个服务",
+    "noServices": "未找到服务",
+    "changeFilter": "尝试更改搜索条件或筛选器",
+    "addSuccess": "服务已添加",
+    "addFailed": "添加服务失败",
+    "deleteSuccess": "服务已删除",
+    "deleteFailed": "删除服务失败",
+    "fetchFailed": "获取服务列表失败",
+    "deleteTitle": "删除服务",
+    "deleteConfirm": "确定要删除 {{name}} 吗？此操作不可撤销。"
+  },
+  "service": {
+    "notFound": "服务未找到",
+    "backToServices": "返回服务列表",
+    "updateSuccess": "服务已更新",
+    "updateFailed": "更新服务失败",
+    "loadFailed": "加载服务失败",
+    "editService": "编辑服务",
+    "saveChanges": "保存更改",
+    "deleteTitle": "删除服务",
+    "deleteConfirm": "确定要删除 {{name}} 吗？此操作不可撤销。"
+  },
+  "detail": {
+    "overview": "概览",
+    "dependencies": "依赖",
+    "healthHistory": "健康历史",
+    "credentials": "凭证",
+    "config": "配置",
+    "basicInfo": "基本信息",
+    "hostname": "主机名",
+    "port": "端口",
+    "type": "类型",
+    "location": "位置",
+    "lastCheck": "上次检查",
+    "responseTime": "响应时间",
+    "dependsOn": "依赖项 ({{count}})",
+    "dependsOnLabel": "依赖项",
+    "dependedBy": "被依赖 ({{count}})",
+    "dependedByLabel": "被依赖",
+    "noDependencies": "无依赖",
+    "noDepsConfigured": "未配置依赖",
+    "responseTimeRecent": "响应时间 (近期)",
+    "healthCheckHistory": "健康检查历史",
+    "time": "时间",
+    "status": "状态",
+    "response": "响应",
+    "noHealthChecks": "暂无健康检查记录",
+    "noCredentials": "未配置凭证",
+    "noConfig": "无配置项"
+  },
+  "topology": {
+    "title": "服务拓扑",
+    "subtitle": "{{count}} 个服务",
+    "layout": "布局",
+    "filter": "筛选",
+    "allTypes": "所有类型",
+    "fit": "适应",
+    "legend": "图例",
+    "running": "运行中",
+    "error": "异常",
+    "stopped": "已停止",
+    "unknown": "未知",
+    "clickHint": "点击节点 → 查看详情"
+  },
+  "health": {
+    "title": "健康监控",
+    "lastCheck": "上次检查：{{time}}",
+    "runCheck": "运行检查",
+    "up": "正常",
+    "down": "异常",
+    "avgRt": "平均响应",
+    "checks": "检查次数",
+    "responseTrend": "响应时间趋势",
+    "serviceStatus": "服务状态",
+    "check": "检查"
+  },
+  "healthTable": {
+    "service": "服务",
+    "type": "类型",
+    "status": "状态",
+    "response": "响应",
+    "trend": "趋势",
+    "error": "错误",
+    "action": "操作",
+    "check": "检查"
+  },
+  "stats": {
+    "total": "总计",
+    "up": "正常",
+    "down": "异常",
+    "avgRt": "平均响应"
+  },
+  "form": {
+    "name": "名称",
+    "namePlaceholder": "示例：Nginx",
+    "type": "类型",
+    "hostname": "主机名",
+    "port": "端口",
+    "description": "描述",
+    "location": "位置"
+  },
+  "responseChart": {
+    "notEnough": "数据不足，无法绘制图表"
+  },
+  "lang": {
+    "switch": "English"
+  },
+  "healthStatus": {
+    "up": "正常",
+    "down": "异常",
+    "timeout": "超时",
+    "unknown": "未知"
+  }
+}

@@ -1,0 +1,163 @@
+{
+  "common": {
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "save": "Save",
+    "close": "Close",
+    "confirm": "Confirm",
+    "noData": "--",
+    "optional": "optional",
+    "required": "Required",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "back": "Back",
+    "search": "Search",
+    "filter": "Filter",
+    "all": "All",
+    "add": "Add",
+    "prev": "Prev",
+    "next": "Next",
+    "auto": "Auto"
+  },
+  "nav": {
+    "title": "CMDB",
+    "services": "Services",
+    "topology": "Topology",
+    "health": "Health"
+  },
+  "status": {
+    "running": "Running",
+    "error": "Error",
+    "stopped": "Stopped",
+    "unknown": "Unknown"
+  },
+  "type": {
+    "web": "Web",
+    "database": "DB",
+    "docker": "Docker",
+    "proxy": "Proxy",
+    "tunnel": "Tunnel",
+    "network": "Network",
+    "cache": "Cache"
+  },
+  "services": {
+    "title": "Services",
+    "subtitle": "{{count}} services monitored",
+    "search": "Search services...",
+    "addService": "Add Service",
+    "addFirst": "Add your first service to get started",
+    "noServices": "No services found",
+    "changeFilter": "Try changing your search or filter",
+    "addSuccess": "Service added",
+    "addFailed": "Failed to add service",
+    "deleteSuccess": "Service deleted",
+    "deleteFailed": "Failed to delete service",
+    "fetchFailed": "Failed to fetch services",
+    "deleteTitle": "Delete Service",
+    "deleteConfirm": "Are you sure you want to delete {{name}}? This action cannot be undone."
+  },
+  "service": {
+    "notFound": "Service not found",
+    "backToServices": "Back to Services",
+    "updateSuccess": "Service updated",
+    "updateFailed": "Failed to update service",
+    "loadFailed": "Failed to load service",
+    "editService": "Edit Service",
+    "saveChanges": "Save Changes",
+    "deleteTitle": "Delete Service",
+    "deleteConfirm": "Are you sure you want to delete {{name}}? This cannot be undone."
+  },
+  "detail": {
+    "overview": "Overview",
+    "dependencies": "Dependencies",
+    "healthHistory": "Health History",
+    "credentials": "Credentials",
+    "config": "Config",
+    "basicInfo": "Basic Info",
+    "hostname": "Hostname",
+    "port": "Port",
+    "type": "Type",
+    "location": "Location",
+    "lastCheck": "Last Check",
+    "responseTime": "Response Time",
+    "dependsOn": "Depends on ({{count}})",
+    "dependsOnLabel": "Depends on",
+    "dependedBy": "Depended by ({{count}})",
+    "dependedByLabel": "Depended by",
+    "noDependencies": "No dependencies",
+    "noDepsConfigured": "No dependencies configured",
+    "responseTimeRecent": "Response Time (recent)",
+    "healthCheckHistory": "Health Check History",
+    "time": "Time",
+    "status": "Status",
+    "response": "Response",
+    "noHealthChecks": "No health checks recorded",
+    "noCredentials": "No credentials configured",
+    "noConfig": "No config entries"
+  },
+  "topology": {
+    "title": "Service Topology",
+    "subtitle": "{{count}} services",
+    "layout": "Layout",
+    "filter": "Filter",
+    "allTypes": "All types",
+    "fit": "Fit",
+    "legend": "Legend",
+    "running": "running",
+    "error": "error",
+    "stopped": "stopped",
+    "unknown": "unknown",
+    "clickHint": "Click node → detail"
+  },
+  "health": {
+    "title": "Health Monitor",
+    "lastCheck": "Last check: {{time}}",
+    "runCheck": "Run Check",
+    "up": "Up",
+    "down": "Down",
+    "avgRt": "Avg RT",
+    "checks": "Checks",
+    "responseTrend": "Response Time Trend",
+    "serviceStatus": "Service Status",
+    "check": "Check"
+  },
+  "healthTable": {
+    "service": "Service",
+    "type": "Type",
+    "status": "Status",
+    "response": "Response",
+    "trend": "Trend",
+    "error": "Error",
+    "action": "Action",
+    "check": "Check"
+  },
+  "stats": {
+    "total": "Total",
+    "up": "Up",
+    "down": "Down",
+    "avgRt": "Avg RT"
+  },
+  "form": {
+    "name": "Name",
+    "namePlaceholder": "e.g. Nginx",
+    "type": "Type",
+    "hostname": "Hostname",
+    "port": "Port",
+    "description": "Description",
+    "location": "Location"
+  },
+  "responseChart": {
+    "notEnough": "Not enough data for chart"
+  },
+  "lang": {
+    "switch": "中文"
+  },
+  "healthStatus": {
+    "up": "Up",
+    "down": "Down",
+    "timeout": "Timeout",
+    "unknown": "Unknown"
+  }
+}

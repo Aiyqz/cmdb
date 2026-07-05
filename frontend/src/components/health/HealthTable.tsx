@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import StatusDot from '../ui/StatusDot'
 import TypeTag from '../ui/TypeTag'
 import Sparkline from '../ui/Sparkline'
@@ -10,6 +11,7 @@ interface HealthTableProps {
 }
 
 const HealthTable: React.FC<HealthTableProps> = ({ services, onCheckService }) => {
+  const { t } = useTranslation()
   const getRTColor = (rt: number | null | undefined) => {
     if (rt === null || rt === undefined) return 'var(--text-faint)'
     if (rt < 100) return 'var(--status-up)'
@@ -22,13 +24,13 @@ const HealthTable: React.FC<HealthTableProps> = ({ services, onCheckService }) =
       <table className="w-full text-[13px]">
         <thead>
           <tr className="border-b border-border-subtle text-text-tertiary text-[11px] uppercase tracking-wider">
-            <th className="text-left py-2 px-3 font-medium">Service</th>
-            <th className="text-left py-2 px-3 font-medium hidden sm:table-cell">Type</th>
-            <th className="text-left py-2 px-3 font-medium">Status</th>
-            <th className="text-right py-2 px-3 font-medium">Response</th>
-            <th className="text-left py-2 px-3 font-medium hidden md:table-cell">Trend</th>
-            <th className="text-left py-2 px-3 font-medium hidden lg:table-cell">Error</th>
-            <th className="text-right py-2 px-3 font-medium">Action</th>
+            <th className="text-left py-2 px-3 font-medium">{t('healthTable.service')}</th>
+            <th className="text-left py-2 px-3 font-medium hidden sm:table-cell">{t('healthTable.type')}</th>
+            <th className="text-left py-2 px-3 font-medium">{t('healthTable.status')}</th>
+            <th className="text-right py-2 px-3 font-medium">{t('healthTable.response')}</th>
+            <th className="text-left py-2 px-3 font-medium hidden md:table-cell">{t('healthTable.trend')}</th>
+            <th className="text-left py-2 px-3 font-medium hidden lg:table-cell">{t('healthTable.error')}</th>
+            <th className="text-right py-2 px-3 font-medium">{t('healthTable.action')}</th>
           </tr>
         </thead>
         <tbody>
@@ -56,12 +58,12 @@ const HealthTable: React.FC<HealthTableProps> = ({ services, onCheckService }) =
                 </td>
                 <td className="py-2.5 px-3">
                   <span className="text-[11px] font-medium" style={{ color: isDown ? 'var(--status-down)' : 'var(--status-up)' }}>
-                    {service.status}
+                    {t(`status.${service.status}`)}
                   </span>
                 </td>
                 <td className="py-2.5 px-3 text-right font-mono">
                   <span style={{ color: getRTColor(rt) }}>
-                    {rt !== null && rt !== undefined ? `${rt}ms` : '--'}
+                    {rt !== null && rt !== undefined ? `${rt}ms` : t('common.noData')}
                   </span>
                 </td>
                 <td className="py-2.5 px-3 hidden md:table-cell">
@@ -72,7 +74,7 @@ const HealthTable: React.FC<HealthTableProps> = ({ services, onCheckService }) =
                 <td className="py-2.5 px-3 hidden lg:table-cell">
                   <span className="text-[11px] text-text-tertiary truncate max-w-[140px] block"
                     title={lastCheck?.errorMessage || ''}>
-                    {lastCheck?.errorMessage || '--'}
+                    {lastCheck?.errorMessage || t('common.noData')}
                   </span>
                 </td>
                 <td className="py-2.5 px-3 text-right">
@@ -81,7 +83,7 @@ const HealthTable: React.FC<HealthTableProps> = ({ services, onCheckService }) =
                       onClick={() => onCheckService(service.id)}
                       className="text-[11px] text-accent hover:text-accent-hover font-medium"
                     >
-                      Check
+                      {t('healthTable.check')}
                     </button>
                   )}
                 </td>

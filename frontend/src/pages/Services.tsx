@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 import { api } from '../lib/api'
 import { useToast } from '../components/ui/Toast'
 import SearchInput from '../components/ui/SearchInput'
@@ -13,6 +14,7 @@ import type { Service } from '../lib/types'
 const PAGE_SIZE = 12
 
 const Services: React.FC = () => {
+  const { t } = useTranslation()
   const [services, setServices] = useState<Service[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
@@ -27,7 +29,7 @@ const Services: React.FC = () => {
       const data = await api.get('/api/health/status')
       setServices(data)
     } catch {
-      addToast('error', 'Failed to fetch services')
+      addToast('error', t('services.fetchFailed'))
     } finally {
       setLoading(false)
     }
@@ -88,11 +90,11 @@ const Services: React.FC = () => {
         description: data.description || undefined,
         location: data.location || undefined,
       })
-      addToast('success', 'Service added')
+      addToast('success', t('services.addSuccess'))
       setAddOpen(false)
       fetchServices()
     } catch {
-      addToast('error', 'Failed to add service')
+      addToast('error', t('services.addFailed'))
     }
   }
 
@@ -100,11 +102,11 @@ const Services: React.FC = () => {
     if (!deleteTarget) return
     try {
       await api.delete(`/api/services/${deleteTarget.id}`)
-      addToast('success', 'Service deleted')
+      addToast('success', t('services.deleteSuccess'))
       setDeleteTarget(null)
       fetchServices()
     } catch {
-      addToast('error', 'Failed to delete service')
+      addToast('error', t('services.deleteFailed'))
     }
   }
 
@@ -124,36 +126,36 @@ const Services: React.FC = () => {
       {/* Header */}
       <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
         <div>
-          <h1 className="text-[22px] font-semibold text-text-primary">Services</h1>
-          <p className="text-[13px] text-text-tertiary mt-0.5">{services.length} services monitored</p>
+          <h1 className="text-[22px] font-semibold text-text-primary">{t('services.title')}</h1>
+          <p className="text-[13px] text-text-tertiary mt-0.5">{t('services.subtitle', { count: services.length })}</p>
         </div>
         <div className="flex items-center gap-3">
           <div className="w-48 sm:w-56">
-            <SearchInput value={search} onChange={setSearch} placeholder="Search services..." />
+            <SearchInput value={search} onChange={setSearch} placeholder={t('services.search')} />
           </div>
           <button
             onClick={() => setAddOpen(true)}
             className="px-4 py-2 rounded-md text-[13px] font-medium bg-accent text-accent-text hover:opacity-90 transition-opacity flex items-center gap-1.5"
           >
-            <span>+</span> Add
+            <span>+</span> {t('common.add')}
           </button>
         </div>
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
-        <StatCard label="Total" value={services.length} />
-        <StatCard label="Up" value={runningCount} color="var(--status-up)" subtitle={errorCount > 0 ? `${errorCount} down` : undefined} />
-        <StatCard label="Down" value={errorCount} color={errorCount > 0 ? 'var(--status-down)' : 'var(--text-tertiary)'} />
-        <StatCard label="Avg RT" value={avgMs !== null ? `${avgMs}ms` : '--'} color={avgMs !== null && avgMs < 100 ? 'var(--status-up)' : 'var(--text-primary)'} />
+        <StatCard label={t('stats.total')} value={services.length} />
+        <StatCard label={t('stats.up')} value={runningCount} color="var(--status-up)" subtitle={errorCount > 0 ? `${errorCount} ${t('stats.down')}` : undefined} />
+        <StatCard label={t('stats.down')} value={errorCount} color={errorCount > 0 ? 'var(--status-down)' : 'var(--text-tertiary)'} />
+        <StatCard label={t('stats.avgRt')} value={avgMs !== null ? `${avgMs}ms` : t('common.noData')} color={avgMs !== null && avgMs < 100 ? 'var(--status-up)' : 'var(--text-primary)'} />
       </div>
 
       {/* Filters */}
       <div className="mb-5">
         <FilterChips
           options={[
-            { label: 'All', value: '__all__', count: services.length },
-            ...Object.entries(typeCounts).map(([type, count]) => ({ label: type, value: type, count })),
+            { label: t('common.all'), value: '__all__', count: services.length },
+            ...Object.entries(typeCounts).map(([type, count]) => ({ label: t(`type.${type}`), value: type, count })),
           ]}
           selected={typeFilter}
           onChange={(v) => { setTypeFilter(v === '__all__' ? null : v); setPage(1) }}
@@ -164,9 +166,9 @@ const Services: React.FC = () => {
       {filtered.length === 0 ? (
         <EmptyState
           icon="🔍"
-          title="No services found"
-          description={search || typeFilter ? 'Try changing your search or filter' : 'Add your first service to get started'}
-          action={!search && !typeFilter ? { label: 'Add Service', onClick: () => setAddOpen(true) } : undefined}
+          title={t('services.noServices')}
+          description={search || typeFilter ? t('services.changeFilter') : t('services.addFirst')}
+          action={!search && !typeFilter ? { label: t('services.addService'), onClick: () => setAddOpen(true) } : undefined}
         />
       ) : (
         <>
@@ -184,7 +186,7 @@ const Services: React.FC = () => {
                 onClick={() => setPage(page - 1)}
                 className="px-3 py-1.5 rounded-md text-[12px] text-text-secondary border border-border-subtle hover:border-border-default disabled:opacity-30 disabled:cursor-not-allowed"
               >
-                Prev
+                {t('common.prev')}
               </button>
               <span className="text-[12px] text-text-tertiary px-3">
                 {page} / {totalPages}
@@ -194,7 +196,7 @@ const Services: React.FC = () => {
                 onClick={() => setPage(page + 1)}
                 className="px-3 py-1.5 rounded-md text-[12px] text-text-secondary border border-border-subtle hover:border-border-default disabled:opacity-30 disabled:cursor-not-allowed"
               >
-                Next
+                {t('common.next')}
               </button>
             </div>
           )}
@@ -202,35 +204,34 @@ const Services: React.FC = () => {
       )}
 
       {/* Add Modal */}
-      <Modal open={addOpen} onClose={() => setAddOpen(false)} title="Add Service">
-        <ServiceForm onSubmit={handleAdd} onCancel={() => setAddOpen(false)} />
+      <Modal open={addOpen} onClose={() => setAddOpen(false)} title={t('services.addService')}>
+        <ServiceForm onSubmit={handleAdd} onCancel={() => setAddOpen(false)} submitLabel={t('services.addService')} />
       </Modal>
 
       {/* Delete Confirm */}
       <Modal
         open={!!deleteTarget}
         onClose={() => setDeleteTarget(null)}
-        title="Delete Service"
+        title={t('services.deleteTitle')}
         footer={
           <>
             <button
               onClick={() => setDeleteTarget(null)}
               className="px-4 py-2 rounded-md text-[13px] font-medium text-text-secondary hover:text-text-primary border border-border-subtle hover:border-border-default"
             >
-              Cancel
+              {t('common.cancel')}
             </button>
             <button
               onClick={handleDelete}
               className="px-4 py-2 rounded-md text-[13px] font-medium bg-down text-white hover:opacity-90"
             >
-              Delete
+              {t('common.delete')}
             </button>
           </>
         }
       >
         <p className="text-[13px] text-text-secondary">
-          Are you sure you want to delete <span className="text-text-primary font-medium">{deleteTarget?.name}</span>?
-          This action cannot be undone.
+          {t('services.deleteConfirm', { name: deleteTarget?.name })}
         </p>
       </Modal>
     </div>

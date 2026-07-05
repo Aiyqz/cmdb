@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useHealth } from '../hooks/useHealth'
 import StatCard from '../components/ui/StatCard'
 import HealthTable from '../components/health/HealthTable'
@@ -13,6 +14,7 @@ const AUTO_OPTIONS = [
 const COLORS = ['var(--status-up)', 'var(--accent)', 'var(--status-slow)', '#8B5CF6', '#F472B6', '#FB923C']
 
 const Health: React.FC = () => {
+  const { t } = useTranslation()
   const {
     services,
     loading,
@@ -62,17 +64,17 @@ const Health: React.FC = () => {
       {/* Header */}
       <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
         <div>
-          <h1 className="text-[22px] font-semibold text-text-primary">Health Monitor</h1>
+          <h1 className="text-[22px] font-semibold text-text-primary">{t('health.title')}</h1>
           {lastCheck && (
             <p className="text-[13px] text-text-tertiary mt-0.5">
-              Last check: {lastCheck.toLocaleTimeString()}
+              {t('health.lastCheck', { time: lastCheck.toLocaleTimeString() })}
             </p>
           )}
         </div>
         <div className="flex items-center gap-3">
           {/* Auto-refresh */}
           <div className="flex items-center gap-2">
-            <label className="text-[12px] text-text-secondary">Auto</label>
+            <label className="text-[12px] text-text-secondary">{t('common.auto')}</label>
             <button
               onClick={() => setAutoEnabled(!autoEnabled)}
               className={`w-8 h-4 rounded-full transition-colors relative ${
@@ -105,7 +107,7 @@ const Health: React.FC = () => {
             {checking ? (
               <span className="inline-block w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin" />
             ) : (
-              'Run Check'
+              t('health.runCheck')
             )}
           </button>
         </div>
@@ -113,18 +115,18 @@ const Health: React.FC = () => {
 
       {/* Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
-        <StatCard label="Up" value={`${runningCount}/${services.length}`}
+        <StatCard label={t('health.up')} value={`${runningCount}/${services.length}`}
           color={runningCount === services.length ? 'var(--status-up)' : 'var(--text-primary)'} />
-        <StatCard label="Down" value={errorCount}
+        <StatCard label={t('health.down')} value={errorCount}
           color={errorCount > 0 ? 'var(--status-down)' : 'var(--text-tertiary)'} />
-        <StatCard label="Avg RT" value={avgMs !== null ? `${avgMs}ms` : '--'}
+        <StatCard label={t('health.avgRt')} value={avgMs !== null ? `${avgMs}ms` : t('common.noData')}
           color={avgMs !== null && avgMs < 100 ? 'var(--status-up)' : 'var(--text-primary)'} />
-        <StatCard label="Checks" value={totalChecks} />
+        <StatCard label={t('health.checks')} value={totalChecks} />
       </div>
 
       {/* Response Chart */}
       <div className="rounded-xl p-4 mb-6 border border-border-subtle" style={{ backgroundColor: 'var(--bg-surface)' }}>
-        <h3 className="text-[13px] font-medium text-text-secondary mb-3">Response Time Trend</h3>
+        <h3 className="text-[13px] font-medium text-text-secondary mb-3">{t('health.responseTrend')}</h3>
         <ResponseChart
           data={services.flatMap(s =>
             (s.healthChecks || []).map(h => ({
@@ -140,7 +142,7 @@ const Health: React.FC = () => {
       {/* Health Table */}
       <div className="rounded-xl border border-border-subtle overflow-hidden" style={{ backgroundColor: 'var(--bg-surface)' }}>
         <div className="px-4 py-3 border-b border-border-subtle">
-          <h3 className="text-[13px] font-medium text-text-secondary">Service Status</h3>
+          <h3 className="text-[13px] font-medium text-text-secondary">{t('health.serviceStatus')}</h3>
         </div>
         <HealthTable services={services} />
       </div>

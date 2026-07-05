@@ -1,5 +1,6 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import StatusDot from '../ui/StatusDot'
 import TypeTag from '../ui/TypeTag'
 import Sparkline from '../ui/Sparkline'
@@ -11,6 +12,7 @@ interface ServiceCardProps {
 }
 
 const ServiceCard: React.FC<ServiceCardProps> = ({ service, onDelete }) => {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const lastCheck = service.healthChecks?.[0]
   const responseTime = lastCheck?.responseTime ?? null
@@ -62,9 +64,9 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, onDelete }) => {
 
       <div className="mt-3 pt-3 border-t border-border-subtle flex items-end justify-between">
         <div>
-          <div className="text-[10px] text-text-tertiary uppercase tracking-wider mb-0.5">Response</div>
+          <div className="text-[10px] text-text-tertiary uppercase tracking-wider mb-0.5">{t('detail.responseTime')}</div>
           <div className="text-[15px] font-mono font-medium" style={{ color: responseColor }}>
-            {responseTime !== null ? `${responseTime}ms` : '--'}
+            {responseTime !== null ? `${responseTime}ms` : t('common.noData')}
           </div>
         </div>
         <div className="flex-1 ml-3">

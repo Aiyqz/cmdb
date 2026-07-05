@@ -1,11 +1,12 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import type { ServiceStatus } from '../../lib/types'
 
-const statusConfig: Record<ServiceStatus, { label: string; color: string; bg: string; glow?: string }> = {
-  running: { label: 'Running', color: 'var(--status-up)', bg: 'var(--status-up-bg)', glow: 'var(--status-up-glow)' },
-  error: { label: 'Error', color: 'var(--status-down)', bg: 'var(--status-down-bg)' },
-  stopped: { label: 'Stopped', color: 'var(--status-slow)', bg: 'var(--status-slow-bg)' },
-  unknown: { label: 'Unknown', color: 'var(--status-unknown)', bg: 'var(--status-unknown-bg)' },
+const statusConfig: Record<ServiceStatus, { color: string; bg: string; glow?: string }> = {
+  running: { color: 'var(--status-up)', bg: 'var(--status-up-bg)', glow: 'var(--status-up-glow)' },
+  error: { color: 'var(--status-down)', bg: 'var(--status-down-bg)' },
+  stopped: { color: 'var(--status-slow)', bg: 'var(--status-slow-bg)' },
+  unknown: { color: 'var(--status-unknown)', bg: 'var(--status-unknown-bg)' },
 }
 
 interface StatusBadgeProps {
@@ -14,6 +15,7 @@ interface StatusBadgeProps {
 }
 
 const StatusBadge: React.FC<StatusBadgeProps> = ({ status, showDot = true }) => {
+  const { t } = useTranslation()
   const config = statusConfig[status] || statusConfig.unknown
   return (
     <span
@@ -30,7 +32,7 @@ const StatusBadge: React.FC<StatusBadgeProps> = ({ status, showDot = true }) => 
           }}
         />
       )}
-      {config.label}
+      {t(`status.${status}`)}
     </span>
   )
 }

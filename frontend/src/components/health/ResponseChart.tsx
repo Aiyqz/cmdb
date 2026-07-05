@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 interface ResponseChartProps {
   data: { time: string; values: Record<string, number | null> }[]
@@ -9,8 +10,9 @@ interface ResponseChartProps {
 const COLORS = ['var(--status-up)', 'var(--accent)', 'var(--status-slow)', '#8B5CF6', '#F472B6', '#FB923C']
 
 const ResponseChart: React.FC<ResponseChartProps> = ({ data, services, height = 120 }) => {
+  const { t } = useTranslation()
   if (data.length < 2) {
-    return <div className="text-text-faint text-[12px] flex items-center justify-center" style={{ height }}>Not enough data for chart</div>
+    return <div className="text-text-faint text-[12px] flex items-center justify-center" style={{ height }}>{t('responseChart.notEnough')}</div>
   }
 
   const allValues = data.flatMap((d) => Object.values(d.values).filter((v): v is number => v !== null))

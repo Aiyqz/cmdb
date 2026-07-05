@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import type { ServiceType } from '../../lib/types'
 
 export interface ServiceFormData {
@@ -21,7 +22,8 @@ const defaultData: ServiceFormData = { name: '', type: 'web', hostname: '', port
 
 const typeOptions: ServiceType[] = ['web', 'database', 'docker', 'proxy', 'tunnel', 'network', 'cache']
 
-const ServiceForm: React.FC<ServiceFormProps> = ({ initial, onSubmit, onCancel, submitLabel = 'Add Service' }) => {
+const ServiceForm: React.FC<ServiceFormProps> = ({ initial, onSubmit, onCancel, submitLabel }) => {
+  const { t } = useTranslation()
   const [form, setForm] = useState<ServiceFormData>({ ...defaultData, ...initial })
   const [errors, setErrors] = useState<Record<string, string>>({})
 
@@ -29,8 +31,8 @@ const ServiceForm: React.FC<ServiceFormProps> = ({ initial, onSubmit, onCancel, 
 
   const validate = (): boolean => {
     const e: Record<string, string> = {}
-    if (!form.name.trim()) e.name = 'Required'
-    if (!form.type.trim()) e.type = 'Required'
+    if (!form.name.trim()) e.name = t('common.required')
+    if (!form.type.trim()) e.type = t('common.required')
     setErrors(e)
     return Object.keys(e).length === 0
   }
@@ -49,48 +51,48 @@ const ServiceForm: React.FC<ServiceFormProps> = ({ initial, onSubmit, onCancel, 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
       <div>
-        <label className="block text-[12px] font-medium text-text-secondary mb-1.5">Name</label>
-        <input type="text" value={form.name} onChange={(e) => set('name', e.target.value)} placeholder="Nginx"
+        <label className="block text-[12px] font-medium text-text-secondary mb-1.5">{t('form.name')}</label>
+        <input type="text" value={form.name} onChange={(e) => set('name', e.target.value)} placeholder={t('form.namePlaceholder')}
           className={inputClass('name')} style={inputStyle} autoFocus />
         {errors.name && <p className="text-[11px] text-down mt-1">{errors.name}</p>}
       </div>
       <div>
-        <label className="block text-[12px] font-medium text-text-secondary mb-1.5">Type</label>
+        <label className="block text-[12px] font-medium text-text-secondary mb-1.5">{t('form.type')}</label>
         <select value={form.type} onChange={(e) => set('type', e.target.value)}
           className={inputClass('type')} style={inputStyle}>
-          {typeOptions.map((t) => <option key={t} value={t}>{t}</option>)}
+          {typeOptions.map((tp) => <option key={tp} value={tp}>{t(`type.${tp}`)}</option>)}
         </select>
       </div>
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-[12px] font-medium text-text-secondary mb-1.5">Hostname</label>
-          <input type="text" value={form.hostname} onChange={(e) => set('hostname', e.target.value)} placeholder="optional"
+          <label className="block text-[12px] font-medium text-text-secondary mb-1.5">{t('form.hostname')}</label>
+          <input type="text" value={form.hostname} onChange={(e) => set('hostname', e.target.value)} placeholder={t('common.optional')}
             className={inputClass('hostname')} style={inputStyle} />
         </div>
         <div>
-          <label className="block text-[12px] font-medium text-text-secondary mb-1.5">Port</label>
-          <input type="text" value={form.port} onChange={(e) => set('port', e.target.value)} placeholder="optional"
+          <label className="block text-[12px] font-medium text-text-secondary mb-1.5">{t('form.port')}</label>
+          <input type="text" value={form.port} onChange={(e) => set('port', e.target.value)} placeholder={t('common.optional')}
             className={inputClass('port')} style={inputStyle} />
         </div>
       </div>
       <div>
-        <label className="block text-[12px] font-medium text-text-secondary mb-1.5">Description</label>
-        <input type="text" value={form.description} onChange={(e) => set('description', e.target.value)} placeholder="optional"
+        <label className="block text-[12px] font-medium text-text-secondary mb-1.5">{t('form.description')}</label>
+        <input type="text" value={form.description} onChange={(e) => set('description', e.target.value)} placeholder={t('common.optional')}
           className={inputClass('description')} style={inputStyle} />
       </div>
       <div>
-        <label className="block text-[12px] font-medium text-text-secondary mb-1.5">Location</label>
-        <input type="text" value={form.location} onChange={(e) => set('location', e.target.value)} placeholder="optional"
+        <label className="block text-[12px] font-medium text-text-secondary mb-1.5">{t('form.location')}</label>
+        <input type="text" value={form.location} onChange={(e) => set('location', e.target.value)} placeholder={t('common.optional')}
           className={inputClass('location')} style={inputStyle} />
       </div>
       <div className="flex justify-end gap-3 mt-1">
         <button type="button" onClick={onCancel}
           className="px-4 py-2 rounded-md text-[13px] font-medium text-text-secondary hover:text-text-primary border border-border-subtle hover:border-border-default transition-colors">
-          Cancel
+          {t('common.cancel')}
         </button>
         <button type="submit"
           className="px-4 py-2 rounded-md text-[13px] font-medium bg-accent text-accent-text hover:opacity-90 transition-opacity">
-          {submitLabel}
+          {submitLabel || t('common.save')}
         </button>
       </div>
     </form>
