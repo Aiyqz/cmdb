@@ -1,0 +1,76 @@
+// Prisma Schema for CMDB
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./cmdb.db"
+}
+
+// Service model
+model Service {
+  id          String   @id @default(cuid())
+  name        String
+  type        String   // web, docker, proxy, tunnel, etc.
+  hostname    String?  // e.g. app.example.com
+  port        Int?
+  status      String   @default("unknown") // running, stopped, error
+  description String?
+  location    String?  // server, router, docker
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  dependencies Dependency[] @relation("ServiceDependsOn")
+  dependedBy  Dependency[] @relation("ServiceDependedBy")
+
+  healthChecks HealthCheck[]
+  credentials Credential[]
+  configs     Config[]
+}
+
+// Dependency model
+model Dependency {
+  id           String   @id @default(cuid())
+  serviceId    String
+  dependsOnId  String
+  service      Service  @relation("ServiceDependsOn", fields: [serviceId], references: [id], onDelete: Cascade)
+  dependsOn    Service  @relation("ServiceDependedBy", fields: [dependsOnId], references: [id], onDelete: Cascade)
+  createdAt    DateTime @default(now())
+
+  @@unique([serviceId, dependsOnId])
+}
+
+// HealthCheck model
+model HealthCheck {
+  id        String   @id @default(cuid())
+  serviceId String
+  service   Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  status    String   // running, error, stopped
+  responseTime Int?
+  errorMessage String?
+  checkedAt DateTime @default(now())
+}
+
+// Credential model
+model Credential {
+  id        String   @id @default(cuid())
+  serviceId String
+  service   Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  key       String   // Cloudflare Token, API Key, etc.
+  value     String   // encrypted in real app, plain text for now
+  type      String   // token, api_key, password
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Config model
+model Config {
+  id        String   @id @default(cuid())
+  serviceId String
+  service   Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  key       String
+  value     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
