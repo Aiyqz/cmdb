@@ -13,12 +13,12 @@ if [ "$confirm" != "y" ] && [ "$confirm" != "Y" ]; then
     exit 0
 fi
 
-# 停止正在运行的进程（通过端口查找）
+# 停止正在运行的进程（只杀监听进程，不杀客户端连接如浏览器）
 echo "停止后端进程 (port 3001)..."
-lsof -ti:3001 2>/dev/null | xargs kill -9 2>/dev/null
+lsof -ti:3001 -sTCP:LISTEN 2>/dev/null | xargs kill 2>/dev/null
 
 echo "停止前端进程 (port 5173)..."
-lsof -ti:5173 2>/dev/null | xargs kill -9 2>/dev/null
+lsof -ti:5173 -sTCP:LISTEN 2>/dev/null | xargs kill 2>/dev/null
 
 # 清理依赖和数据库
 echo "清理 node_modules..."
