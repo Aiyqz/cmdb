@@ -1,0 +1,71 @@
+#!/bin/bash
+# Pre-commit hook: 扫描敏感信息，防止泄露到 git
+# 安装: cp scripts/pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
+
+set -e
+
+# 敏感信息模式列表
+PATTERNS=(
+  "172502431"           # 真实域名
+  "192\.168\."          # 内网 IP
+  "10\.0\."             # 内网 IP
+  "password.*="         # 密码赋值
+  "secret.*="           # 密钥赋值
+  "api_key.*="          # API key
+  "token.*="            # Token
+  "POSTGRES_PASSWORD"   # 数据库密码
+  "ssh root@"           # SSH 凭证
+)
+
+# 只检查源代码文件，排除文档/工具/二进制文件
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(ts|tsx|js|jsx|json|yaml|yml|sh|env|prisma)$' | grep -vE '(pre-commit|git-workflow|README|\.example$)' || true)
+
+if [ -z "$STAGED_FILES" ]; then
+  exit 0
+fi
+
+FOUND_SECRETS=0
+
+for file in $STAGED_FILES; do
+  if [ ! -f "$file" ]; then
+    continue
+  fi
+
+  for pattern in "${PATTERNS[@]}"; do
+    MATCHES=$(grep -n -E "$pattern" "$file" 2>/dev/null || true)
+    if [ -n "$MATCHES" ]; then
+      echo "⚠️  发现敏感信息: $file"
+      echo "$MATCHES" | while read -r line; do
+        echo "   $line"
+      done
+      FOUND_SECRETS=1
+    fi
+  done
+done
+
+# 检查 .env 文件是否被暂存
+ENV_FILES=$(echo "$STAGED_FILES" | grep -E '^\.env$|\.env\.' || true)
+if [ -n "$ENV_FILES" ]; then
+  echo "⚠️  .env 文件被暂存，请检查 .gitignore:"
+  echo "$ENV_FILES"
+  FOUND_SECRETS=1
+fi
+
+# 检查 .db 文件是否被暂存
+DB_FILES=$(echo "$STAGED_FILES" | grep -E '\.db$' || true)
+if [ -n "$DB_FILES" ]; then
+  echo "⚠️  数据库文件被暂存:"
+  echo "$DB_FILES"
+  FOUND_SECRETS=1
+fi
+
+if [ $FOUND_SECRETS -eq 1 ]; then
+  echo ""
+  echo "❌ 提交被阻止：发现敏感信息"
+  echo "   如果是误报，可以用 git commit --no-verify 跳过检查"
+  echo "   但请确认确实没有敏感信息！"
+  exit 1
+fi
+
+echo "✅ 安全检查通过"
+exit 0
