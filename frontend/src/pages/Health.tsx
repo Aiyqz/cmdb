@@ -59,8 +59,20 @@ const Health = () => {
             {service.healthChecks && service.healthChecks.length > 0 && (
               <div className="mt-2 text-sm text-gray-400">
                 <p>最后检查：{new Date(service.healthChecks[0].checkedAt).toLocaleString()}</p>
-                {service.healthChecks[0].responseTime && (
-                  <p>响应时间：{service.healthChecks[0].responseTime}ms</p>
+                {service.healthChecks[0].responseTime != null && (
+                  <div className="flex items-center gap-2 mt-1">
+                    <span>响应时间：</span>
+                    <span className={`px-2 py-0.5 rounded text-xs ${
+                      service.healthChecks[0].responseTime < 100 ? 'bg-green-900 text-green-300' :
+                      service.healthChecks[0].responseTime < 1000 ? 'bg-yellow-900 text-yellow-300' :
+                      'bg-orange-900 text-orange-300'
+                    }`}>
+                      {service.healthChecks[0].responseTime}ms
+                    </span>
+                  </div>
+                )}
+                {service.healthChecks[0].errorMessage && (
+                  <p className="text-red-400 text-xs mt-1">{service.healthChecks[0].errorMessage}</p>
                 )}
               </div>
             )}

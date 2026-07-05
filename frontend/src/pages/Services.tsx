@@ -13,7 +13,8 @@ const Services = () => {
 
   const fetchServices = async () => {
     try {
-      const data = await api.get('/api/services')
+      // 用 health/status 接口，附带最新健康检查数据（含响应时间）
+      const data = await api.get('/api/health/status')
       setServices(data)
       setLoading(false)
     } catch (err) {
@@ -78,6 +79,24 @@ const Services = () => {
             )}
             {service.port && (
               <p className="text-gray-400 text-sm">Port: {service.port}</p>
+            )}
+            {service.healthChecks && service.healthChecks.length > 0 && (
+              <div className="mt-2 flex items-center gap-2 text-xs">
+                {service.healthChecks[0].responseTime != null && (
+                  <span className={`px-2 py-0.5 rounded ${
+                    service.healthChecks[0].responseTime < 100 ? 'bg-green-900 text-green-300' :
+                    service.healthChecks[0].responseTime < 1000 ? 'bg-yellow-900 text-yellow-300' :
+                    'bg-orange-900 text-orange-300'
+                  }`}>
+                    {service.healthChecks[0].responseTime}ms
+                  </span>
+                )}
+                {service.healthChecks[0].errorMessage && (
+                  <span className="text-gray-500 truncate" title={service.healthChecks[0].errorMessage}>
+                    {service.healthChecks[0].errorMessage}
+                  </span>
+                )}
+              </div>
             )}
             <div className="mt-4 flex justify-end">
               <button
