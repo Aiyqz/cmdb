@@ -15,7 +15,13 @@ const servicesRoutes: FastifyPluginAsync = async (fastify) => {
     const { id } = request.params as { id: string }
     const service = await prisma.service.findUnique({
       where: { id },
-      include: { dependencies: true, dependedBy: true, credentials: true, configs: true, healthChecks: true },
+      include: { 
+        dependencies: { include: { dependsOn: true } }, 
+        dependedBy: { include: { service: true } }, 
+        credentials: true, 
+        configs: true, 
+        healthChecks: { orderBy: { checkedAt: 'desc' }, take: 10 },
+      },
     })
     if (!service) {
       reply.code(404).send({ error: 'Service not found' })
